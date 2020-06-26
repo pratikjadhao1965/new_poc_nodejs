@@ -1,196 +1,315 @@
-There are 4 collections i.e. user,shop,cart,items
+There are 4 collections 
+    i.e. User,Shop,Order,Item.
+        Users and Shop are two main collections which then influence
+        the Order and Item collection respectively.to Access Items collection we need 
+        authentication of Shop and for Cart needs authentication of User.
+        
+How to run?
 
+    npm install
+    npm run dev or npm start
+    
+How to test?
+    
+    npm run test
+    
 postman environment variables:
-    url             currentValue=localhost:{port}/api
-    authToken       currentValue={user token stored through test script while creating user and logging in user}
 
-                    create user test script:     if (pm.response.code === 201) {
-                                                    pm.environment.set("authToken", pm.response.json().token)
-                                                }
-                    login user test script:    if (pm.response.code === 200) {
-                                                    pm.environment.set("authToken", pm.response.json().token)
-                                                }
+    url:             
+        currentValue=localhost:{port}
 
-    authTokenShop   currentValue={shop token stored through test script while creating shop and loggong in shop}
+    authToken:       
+        currentValue={user token stored through test script while creating user and logging in user}
 
-                    create shop test script:     if (pm.response.code === 201) {
-                                                    pm.environment.set("authTokenShop", pm.response.json().token)
-                                                }
-                    login shop test script:    if (pm.response.code === 200) {
-                                                    pm.environment.set("authTokenShop", pm.response.json().token)
-                                                }
+            create user test script:     if (pm.response.code === 201) {
+                                            pm.environment.set("authToken", pm.response.json().token)
+                                        }
+            login user test script:    if (pm.response.code === 200) {
+                                            pm.environment.set("authToken", pm.response.json().token)
+                                        }
+
+    authTokenShop  
+        currentValue={shop token stored through test script while creating shop and loggong in shop}
+
+            create shop test script:     if (pm.response.code === 201) {
+                                            pm.environment.set("authTokenShop", pm.response.json().token)
+                                        }
+            login shop test script:    if (pm.response.code === 200) {
+                                            pm.environment.set("authTokenShop", pm.response.json().token)
+                                        }
 
 
-user
+user:
 
-    create user:                localhost:{port}/api/users                 (stores user and assign them tokens for sessions while storing)
-                            body:{
-                                    "name":"xyz", 
-                                    "email": "xyz@gmail.com",
-                                    "password": "12345678",
-                                    "phone": 1234567890,
-                                    "addresses": [{
-                                        "housename": "abc",
-                                        "area": "abc nagar",
-                                        "pincode":123456,
-                                        "city": "abc",
-                                        "state": "abc",
-                                        "name":"abc",
-                                        "phone":1234567890
-                                    }],
-                                    "age": 21,
-                                    "gender": "male"
-                                }
+    create user:               
+         localhost:{port}/api/users =>(stores user and assign them 
+                                        tokens for sessions while storing)
+            body:{
+                "name":"xyz", 
+                "email": "xyz@gmail.com",
+                "password": "12345678",
+                "phone": 1234567890,
+                "cart":[]
+                "addresses": [{
+                        "housename": "abc",
+                        "area": "abc nagar",
+                        "pincode":123456,
+                        "city": "abc",
+                        "state": "abc",
+                        "name":"abc",
+                        "phone":1234567890
+                }],
+                "total":0
+                "age": 21,
+                "gender": "male"
+                }                                                       
 
-    login user:                 localhost:{port}/api/users/login            (logs in user and create another token)
-                            body:{
-                                "email":"xyz@gmail.com",
-                                "password":"12345678"
-                            }
+    login user:
+        localhost:{port}/api/users/login=>(logs in user and create another token)
+            body:{
+                "email":"xyz@gmail.com",
+                "password":"12345678"
+            }
     
-    logout user:                localhost:{port}/api/users/logout           (logs out the current logged in user using token)
+    logout user:                
+        localhost:{port}/api/users/logout=>(logs out the current 
+                                            logged in user using token)
+            {no body ,it will take the Authorization token 
+            from environment variable i.e. AuthToken}
 
-    logoutAll user:             localhost:{port}/api/users/logoutAll        (logs out all user for current account by deleting all tokens)
+    logoutAll user:
+        localhost:{port}/api/users/logoutAll=>(logs out all user for current 
+                                                account by deleting all tokens)
+            {no body ,it will take the Authorization token 
+            from environment variable i.e. AuthToken}
 
-    read user profile:          localhost:{port}/api/users/me               (reads user profile)
+    read user profile:          
+        localhost:{port}/api/users/me=>(reads user profile using auth token)
+            {no body ,it will take the Authorization token 
+            from environment variable i.e. AuthToken}
 
-    read user :                 localhost:{port}/api/users/:id              (reads user data using id)
+    read user :
+        localhost:{port}/api/users/:id=>(reads user data using id)
+            {no body, it will take the Authorization token 
+            from environment variable i.e. AuthToken}
 
-    update user profile:        localhost:{port}/api/users/me               (updates user profile)
-                            body:{
-                                    "{fieldname}": "xyz"
-                                }
+    update user profile:
+        localhost:{port}/api/users/me=>(updates user profile using auth token)
+            body:{
+                    "{fieldname}": "xyz"
+                }
 
-    update address of user:     localhost:{port}/api/users/me/address/:id   (updates user address using id of address stored while creating user)
-                            body:{
-                                    "{fieldname}": "xyz"
-                                }
-    add new address:            localhost:{port}/api/users/me/addAddress    (adds new user address)
-                            body:{
-                                        "housename": "abc",
-                                        "area": "abc nagar",
-                                        "pincode":123456,
-                                        "city": "abc",
-                                        "state": "abc",
-                                        "name":"abc",
-                                        "phone":1234567890
-                                    }
-    delete address of user:     localhost:{port}/api/users/me/deleteAddress/:id (deletes user address using id of address stored while creating user)
+    update address of user:     
+        localhost:{port}/api/users/me/address/:id=>(updates user address using id of address 
+                                                    stored while creating user who is logged in)
+            body:{
+                    "{fieldname}": "xyz"
+                }
+
+    add new address:
+        localhost:{port}/api/users/me/addAddress=>(adds new user address to logged in user profile)
+            body:{
+                        "housename": "abc",
+                        "area": "abc nagar",
+                        "pincode":123456,
+                        "city": "abc",
+                        "state": "abc",
+                        "name":"abc",
+                        "phone":1234567890
+                    }
+    delete address of user:
+        localhost:{port}/api/users/me/deleteAddress/:id=>(deletes user address using id 
+                                                        of address stored while creating user)
     
-    delete user profile:        localhost:{port}/api/users/me               (delete user profile)
+    delete user profile:        
+        localhost:{port}/api/users/me=>(delete user profile using auth token)
 
+
+
+    operating on user cart:
+
+        getting cart in detail(by populating on _id of each item in cart):
+        localhost:{port}/api/detailedcart
+
+        getting cart:
+        localhost:{port}/api/carts
     
+        emptying all items in cart:
+        localhost:{port}/api/carts/removeitems
+
+        updates cart Items(pushes items if not already present):
+        localhost:{port}/api/carts
+            [{
+                "_id":"{itemId}",
+                "quantity":4
+            },{
+
+                "_id":"{itemId}",
+                "quantity":2
+            }]
+
+        increments quantity of item in cart using if of item:
+        localhost:{port}/api/carts/additem/{id of item}
+
+        increments quantity of item in cart using if of item:
+        localhost:{port}/api/carts/removeitem/{id of item}
+
 
 shop
 
-    create shop:                localhost:{port}/api/shops                  (stores shop and assign them tokens for sessions while storing)
-                            body:{
-                                    "shopName":"xyz",
-                                    "ownerName":"xyz",
-                                    "email":"xyz@gmail.com",
-                                    "password":"12345678",
-                                    "phone":918928399,
-                                    "location":"xyz"
-                                }
+    create shop:               
+        localhost:{port}/api/shops=>(stores shop and assign them tokens for
+                                     sessions while storing)
+            body:{
+                    "shopName":"xyz",
+                    "ownerName":"xyz",
+                    "email":"xyz@gmail.com",
+                    "password":"12345678",
+                    "phone":918928399,
+                    "location":"xyz"
+                }
 
-    logout shop:                localhost:{port}/api/shops/login            (logs in shop and create another token)
-                            body:{
-                                "email":"xyz@gmail.com",
-                                "password":"12345678"
-                            }
+    logout shop:
+        localhost:{port}/api/shops/login=>(logs in shop and create another token)
+            body:{
+                "email":"xyz@gmail.com",
+                "password":"12345678"
+            }
     
-    logout shop:                localhost:{port}/api/shops/logout           (logs out the current logged in shop using token)
+    logout shop:
+        localhost:{port}/api/shops/logout=>(logs out the current logged in shop using token)
+            {no body ,it will take the Authorization token 
+            from environment variable i.e. AuthTokenShop}   
 
-    logoutAll shop:             localhost:{port}/api/shops/logoutAll        (logs out all shop for current account by deleting all tokens)
+    logoutAll shop:             
+        localhost:{port}/api/shops/logoutAll=>(logs out all shop for current account 
+                                                by deleting all tokens)
+            {no body ,it will take the Authorization token 
+            from environment variable i.e. AuthTokenShop}
 
-    read shop profile:          localhost:{port}/api/shops/me               (reads shop profile)
+    read shop profile:
+        localhost:{port}/api/shops/me=>(reads shop profile)
+            {no body ,it will take the Authorization token 
+            from environment variable i.e. AuthTokenShop}
 
-    read shop :                 localhost:{port}/api/shops/:id              (reads shop data using id)
+    read shop :                 
+        localhost:{port}/api/shops/:id=>(reads shop data using id)
+            {no body ,it will take the Authorization token 
+            from environment variable i.e. AuthTokenShop}
 
-    update shop profile:        localhost:{port}/api/shops/me               (updates shop profile)
-                            body:{
-                                    "{fieldname}": "xyz"
-                                }
+    update shop profile:        
+        localhost:{port}/api/shops/me=>(updates shop profile)
+            body:{
+                    "{fieldname}": "xyz"
+                }
 
-    delete shop profile:        localhost:{port}/api/shops/me               (delete shop profile)
+    delete shop profile:        
+        localhost:{port}/api/shops/me=>(delete shop profile)
 
 
-cart=
+order=
 
-    create cart:                localhost:{port}/api/carts/save             (saves carts in datatbase without authentication of user)
-                            body: {
-                                    "cartItems": [
-                                            {
-                                            "_id":"{id of any existing item}",
-                                            "quantity": 5
-                                            }
-                                        ]}
+    place order/create ordert:
+        localhost:{port}/api/placeorder=>
+                {
+                    "products":[
+                        {
+                            "_id":"5ef4dbc2a3549f001718b263",
+                            "name":"dark bread",
+                            "itemTotal":120,
+                            "quantity":1
+                        }
+                    ],
+                    "orderTotal":120,
+                    "deliveryAddress":
+                        {
+                                "location": "tan nagar",
+                                "pincode": "444705",
+                                "city": "anjangaon surji",
+                                "state": "maharashtra",
+                                "name": "kiran jadhao",
+                                "phone": "9970840094"
+                            }
+                    ,
+                    "paymentMode":"card"
+                }
 
-    update cart(place order):  localhost:{port}/api/carts/submit/:id         (updates a carts with user authentication to place order)
-                            body:{                                           (automatically sets checkedOut:false to checkedOut:true )
-                                    "deliveryAddress":"5ec024a741056e16e803c234",
-                                    "payment":"card"
-                                }
 
-    read allCarts:              localhost:{port}/api/carts                   (reads all carts )
 
-    read cart:                  localhost:{port}/api/carts/:id               (reads cart using id without authenticating)
+    read all orders:
+        localhost:{port}/api/orders=>(reads all orders)
 
-    update cartItem:            localhost:{port}/api/carts/item/:id          (update cartItem using id of cart without authenticating)
-                            body:{
-                                    "_id":"{id of item stored while creating cart}",
-                                    "quantity":6
-                                }
+    read user orders:
+        localhost:{port}/api//me/orders=>(reads user orders only)
 
-    delete cartItem:            localhost:{port}/api/carts/deleteItem/:id    (delete cartItem using id of cart without authenticating)
-                            body:{
-                                    "_id":"{id of item stored while creating cart}",
-                                }
+    get order using id:
+        localhost:{port}/api//order/{id of order}
 
-    delete cart:                localhost:{port}/api/cart/:id               (delete cart using id of cart without authenticating)
-
+    delete order using id:            
+        localhost:{port}/api/order/{id of order}
 
 item:
-    create Item:                localhost:{port}/api/items                  (creates item with authentication for shop)
-                            body:{
-                                    "name": "xyz",
-                                    "price": 120,
-                                    "catagory": "abc",
-                                    "shopId":"{automatically stores id for shop}",
-                                    "description": "6 pieces",
-                                    "stock": 200,
-                                    "reviews": [{
-                                        "body": "nice product",
-                                        "email": "xyz@gmail.com",
-                                        "name": "abc"
-                                    }]
-                                }
-    read items:                 localhost:{port}/api/items                  (reads item with shop authenticating)
-                                    //GET /items?catagory=fruit
-                                    //GET /items?limit=2&skip:2
-                                    //GET /items?sortBy=createdBy:-1
 
-    read item:                  localhost:{port}/api/items/:id              (reads item using id of item with shop authenticating)
+    create Item:
+        localhost:{port}/api/items=>(creates item )
+            body:{
+                    "name": "xyz",
+                    "price": 120,
+                    "catagory": "abc",
+                    "shopId":"{automatically stores id for shop}",
+                    "description": "6 pieces",
+                    "stock": 200,
+                    "reviews": [{
+                        "body": "nice product",
+                        "email": "xyz@gmail.com",
+                        "name": "abc"
+                    }]
+                }
+                
+    read items:      
+        localhost:{port}/api/items?catagory={catagory eg.fruits,vegetables}=>(reads item using catagory)
+        
+                    //GET /items?catagory=fruit
+                    //GET /items?limit=2&skip:2
+                    //GET /items?sortBy=createdBy:-1
+                    
 
-    update item:                localhost:{port}/api/items/:id              (update item using id of item whit shop authenticating)
+    read all item:
+        localhost:{port}/api/allitems
 
-    delete item:                localhost:{port}/api/items/:id              (delete item using id of item with shop authenticating)
+    search item:
+        localhost:{port}/api/searchitems/{name of any item}=(searches using regex)
+
+    update item:                
+        localhost:{port}/api/items/{id of item}
+    
+    delete item:
+    localhost:{port}/api/items/{id of item}
 
 
 user avatar=
-    create user avatar:          localhost:{port}/users/me/avatar            (create user avatar with authentication of user)
-                            body:(in form-data key=avatar 
-                                            value={file})
-    delete user avatar:          localhost:{port}/users/me/avatar            (delete user avatar with authentication of user)
+
+    create user avatar:          
+        localhost:{port}/users/me/avatar=>(create user avatar with authentication of user)
+            body:("in form-data" key=avatar 
+                            value={file})
+    delete user avatar:          
+        localhost:{port}/users/me/avatar=>(delete user avatar with authentication of user)
 
 user avatar=
-    create shop avatar:          localhost:{port}/shops/me/avatar            (create shop avatar with authentication of shop)
-                            body:(in form-data key=avatar 
-                                            value={file})
-    delete shop avatar:          localhost:{port}/shops/me/avatar            (delete shop avatar with authentication of shop)
+
+    create shop avatar:
+        localhost:{port}/shops/me/avatar=>(create shop avatar with authentication of shop)
+            body:("in form-data" key=avatar 
+                            value={file})
+    delete shop avatar:          
+        localhost:{port}/shops/me/avatar=>(delete shop avatar with authentication of shop)
 
 user image=
-    create item image:           localhost:{port}/items/:id/image             (create item image using item id with authentication of shop)
-                            body:(in form-data key=image 
-                                            value={file})
-    delete item image:           localhost:{port}/items/:id/image             (create item image using item id with authentication of shop)
+
+    create item image:
+        localhost:{port}/items/:id/image=>(create item image using item id with authentication of shop)
+            body:(in form-data key=image 
+                            value={file})
+    delete item image:           
+        localhost:{port}/items/:id/image=>(create item image using item id with authentication of shop)
